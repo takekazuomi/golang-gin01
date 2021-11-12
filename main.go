@@ -2,12 +2,21 @@ package main
 
 import (
 	"io"
+	"log"
 	"net/http"
+	"net/http/httputil"
 
 	"github.com/gin-gonic/gin"
 )
 
 func requestDump(c *gin.Context) {
+
+	requestDump, err := httputil.DumpRequest(c.Request, true)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println(string(requestDump))
+
 	s := ""
 	if c.Request.Body != nil {
 		body, err := io.ReadAll(c.Request.Body)
@@ -25,5 +34,5 @@ func main() {
 
 	router.GET("/dump", requestDump)
 
-	router.Run("localhost:8088")
+	router.Run(":8088")
 }
