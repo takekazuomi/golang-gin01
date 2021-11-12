@@ -2,7 +2,6 @@ CR_NAME		?= ghcr.io
 CR_USER		?= takekazuomi
 IMAGE_NAME	?= $(CR_NAME)/$(CR_USER)/golang-gin01
 TAG		?= 0.0.1
-SRC		:= main.go
 
 help:		## Show this help.
 	@sed -ne '/@sed/!s/## //p' $(MAKEFILE_LIST)
@@ -10,7 +9,7 @@ help:		## Show this help.
 run:		## Run
 	go run main.go
 
-drun:		## Run in docker
+drun: build	## Run in docker
 	docker run --rm -it -p 8088:8088 $(IMAGE_NAME):$(TAG)
 
 test:		## Test
@@ -18,7 +17,6 @@ test:		## Test
 
 cover:		## Coverage
 	go test -cover takekazu.omi/golang-gin01
-
 
 build:		## build docker image
 	docker build \

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httputil"
 
@@ -13,9 +13,9 @@ func requestDump(c *gin.Context) {
 
 	requestDump, err := httputil.DumpRequest(c.Request, true)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
-	fmt.Println(string(requestDump))
+	log.Println(string(requestDump))
 
 	s := ""
 	if c.Request.Body != nil {
