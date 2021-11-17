@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -13,16 +14,21 @@ import (
 )
 
 func TestDumpWithBody(t *testing.T) {
+	router := setupRouter()
+
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
 	s := "1234"
 	r := fmt.Sprintf("{\"body\":\"%s\"}", s)
 
-	req, _ := http.NewRequest("GET", "/dump", strings.NewReader(s))
+	req, err := http.NewRequest("GET", "/dump", strings.NewReader(s))
+	if err != nil {
+		log.Printf("error: %v", err)
+	}
 
 	c.Request = req
 
-	requestDump(c)
+	router.ServeHTTP(w, req)
 
 	assert.Equal(t, 200, w.Code)
 
@@ -31,6 +37,8 @@ func TestDumpWithBody(t *testing.T) {
 }
 
 func TestDump(t *testing.T) {
+	router := setupRouter()
+
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
 
@@ -41,7 +49,7 @@ func TestDump(t *testing.T) {
 
 	c.Request = req
 
-	requestDump(c)
+	router.ServeHTTP(w, req)
 
 	assert.Equal(t, 200, w.Code)
 

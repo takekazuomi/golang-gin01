@@ -29,10 +29,16 @@ func requestDump(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"body": s})
 }
 
-func main() {
-	router := gin.Default()
+func setupRouter() *gin.Engine {
+	r := gin.Default()
 
-	router.GET("/dump", requestDump)
+	r.GET("/dump", requestDump)
+
+	return r
+}
+
+func main() {
+	router := setupRouter()
 
 	router.Run(":8088")
 }
